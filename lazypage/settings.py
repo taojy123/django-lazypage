@@ -9,7 +9,7 @@ DEFAULTS = {
     'ASYNC_BY_CELERY': True,
     'CELERY_BROKER_URL': 'redis://password@127.0.0.1:6379/1',
 
-    'SAVE_RESPONSE_BY_REDIS': True,
+    'STORE_BY_REDIS': True,
     'REDIS_HOST': '127.0.0.1',
     'REDIS_PORT': '6379',
     'REDIS_PASSWORD': '',
