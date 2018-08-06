@@ -1,0 +1,2 @@
+include README.md LICENSE requiremtnts.txt
+recursive-include lazypage/templates *.html

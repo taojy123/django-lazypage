@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Lazy Loading</title>
+  <style>
+    body {
+      text-align: center
+    }
+  </style>
+</head>
+
+<body>
+  
+  {% if status == 'loading' %}
+      <p>{{ url }}</p>
+      <p>Page is loading, please wait...</p>
+      <p>[{{ ttl }}]</p>
+      <script>
+          setTimeout(function () {
+              top.location.reload()
+          }, {{ polling_seconds }} * 1000)
+      </script>
+  {% else %}
+      Page not found! maybe the page_id is wrong or the page is expired!
+  {% endif %}
+
+</body>
+</html>
