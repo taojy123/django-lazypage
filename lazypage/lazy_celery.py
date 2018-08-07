@@ -12,12 +12,15 @@ except ImportError as e:
 from lazypage.settings import lazypage_settings
 
 
-platforms.C_FORCE_ROOT = True
+# platforms.C_FORCE_ROOT = True
 
 broker = lazypage_settings.CELERY_BROKER_URL
 celery_app = Celery('lazypage', broker=broker)
 
 celery_app.autodiscover_tasks()
+
+
+# $celery worker -A lazy_celery -l info
 
 
 @celery_app.task(bind=True)

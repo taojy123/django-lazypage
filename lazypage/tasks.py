@@ -1,6 +1,6 @@
 
 from lazypage.execution import execute_lazy_view
-from lazypage.celery_init import celery_app
+from lazypage.lazy_celery import celery_app
 
 
 @celery_app.task
