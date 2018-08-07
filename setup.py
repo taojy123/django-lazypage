@@ -1,7 +1,6 @@
 
 from setuptools import setup, find_packages
 
-
 try:
     from lazypage import VERSION
 except Exception as e:

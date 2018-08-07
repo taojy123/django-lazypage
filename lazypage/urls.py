@@ -7,3 +7,6 @@ urlpatterns = [
     url(r'^loading/(?P<page_id>[\w\d]+?)/$', loading, name='loading'),
 ]
 
+
+def get_urls():
+    return urlpatterns, 'lazypage', 'lazypage'
