@@ -7,12 +7,12 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 from functools import wraps
-from lazypage.utils import get_redis_client, add_param_after_url
+
+from lazypage.utils import get_store_client, add_param_after_url
 from lazypage.settings import lazypage_settings
-from lazypage.tasks import execute_lazy_view
 
 
-redisclient = get_redis_client(decode_responses=False)
+store_client = get_store_client(decode_responses=False)
 expired_seconds = lazypage_settings.EXPIRED_SECONDS
 
 
@@ -36,7 +36,7 @@ def lazypage_decorator(view):
         # the params after `#`, will be ignored
         url = request.get_full_path()
 
-        s = redisclient.get(url + ':response')
+        s = store_client.get(url + ':response')
         if s:
             response = pickle.loads(s)
             return response
@@ -56,11 +56,17 @@ def lazypage_decorator(view):
 
         page_id = uuid.uuid4().hex[-6:]
         url = add_param_after_url(url, 'lazy_%s' % page_id)
-        redisclient.setex(page_id + ':url', expired_seconds, url)
-        redisclient.setex(url + ':response', expired_seconds, '')
+        store_client.setex(page_id + ':url', expired_seconds, url)
+        store_client.setex(url + ':response', expired_seconds, '')
 
         kwargs['execute_by_task'] = True
-        execute_lazy_view.delay(page_id, view_path, view_class_path, request, *args, **kwargs)
+
+        if lazypage_settings.ASYNC_BY_CELERY:
+            from lazypage.tasks import execute_lazy_task
+            execute_lazy_task.delay(page_id, view_path, view_class_path, request, *args, **kwargs)
+        else:
+            from lazypage.execution import async_execute_lazy_view
+            async_execute_lazy_view(page_id, view_path, view_class_path, request, *args, **kwargs)
 
         url = reverse('lazypage:loading', kwargs={'page_id': page_id})
         return HttpResponseRedirect(url)

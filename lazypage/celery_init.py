@@ -3,8 +3,12 @@
 # import os
 # os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'proj.settings')
 
-from __future__ import absolute_import
-from celery import Celery, platforms
+try:
+    from celery import Celery, platforms
+except ImportError as e:
+    print('You should install celery. $pip install celery>=4.2.1')
+    raise e
+
 from lazypage.settings import lazypage_settings
 
 

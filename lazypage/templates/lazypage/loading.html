@@ -19,11 +19,16 @@
       <script>
           setTimeout(function () {
               top.location.reload()
-          }, {{ polling_seconds }} * 1000)
+          }, '{{ polling_seconds }}' * 1000)
       </script>
   {% else %}
-      Page not found! maybe the page_id is wrong or the page is expired!
+      Lazy page not found! Maybe `page_id` is wrong or the page is expired!
   {% endif %}
+
+  <p>
+    <a href="#" onclick="history.back(-1);">&lt;&lt;Back</a>
+  </p>
+
 
 </body>
 </html>

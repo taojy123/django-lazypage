@@ -3,25 +3,25 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
 from lazypage.settings import lazypage_settings
-from lazypage.utils import get_redis_client
+from lazypage.utils import get_store_client
 
 
-redisclient = get_redis_client(decode_responses=False)
+store_client = get_store_client(decode_responses=False)
 expired_seconds = lazypage_settings.EXPIRED_SECONDS
 
 
 def loading(request, page_id):
-    url = redisclient.get(page_id + ':url')
+    url = store_client.get(page_id + ':url')
     if url:
         url = url.decode()
-        response = redisclient.get(url + ':response')
+        response = store_client.get(url + ':response')
         assert response is not None, 'response cannot be None in this moment, please check!'
         if response:
             # page has loaded
             return HttpResponseRedirect(url)
         else:
             # page is loading
-            ttl = redisclient.ttl(page_id + ':url')
+            ttl = store_client.ttl(page_id + ':url')
             polling_seconds = lazypage_settings.POLLING_SECONDS
 
     return render(request, 'lazypage/loading.html', locals())

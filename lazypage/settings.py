@@ -6,17 +6,17 @@ USER_SETTINGS = getattr(settings, 'LAZYPAGE', None)
 
 
 DEFAULTS = {
-    'ASYNC_BY_CELERY': True,
+    'EXPIRED_SECONDS': 3600,
+    'POLLING_SECONDS': 5,
+
+    'ASYNC_BY_CELERY': False,
     'CELERY_BROKER_URL': 'redis://password@127.0.0.1:6379/1',
 
-    'STORE_BY_REDIS': True,
+    'STORE_BY_REDIS': False,
     'REDIS_HOST': '127.0.0.1',
     'REDIS_PORT': '6379',
     'REDIS_PASSWORD': '',
     'REDIS_DB': '2',
-
-    'EXPIRED_SECONDS': 3600,
-    'POLLING_SECONDS': 5,
 }
 
 
