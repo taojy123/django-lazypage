@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 from functools import wraps
-from lazypage.utils import get_redis_client
+from lazypage.utils import get_redis_client, add_param_after_url
 from lazypage.settings import lazypage_settings
 from lazypage.tasks import execute_lazy_view
 
@@ -33,20 +33,13 @@ def lazypage_decorator(view):
         if execute_by_task:
             return view(request, *args, **kwargs)
 
+        # the params after `#`, will be ignored
         url = request.get_full_path()
 
-        lazypage_id = request.GET.get('lazypage_id')
-        if lazypage_id:
-            store_url = (redisclient.get(lazypage_id + ':url') or '').decode()
-            if url == store_url:
-                status = (redisclient.get(lazypage_id + ':status') or '').decode()
-                assert status == 'loaded', '%s lazypage status must not be %s' % (lazypage_id, status)
-
-                response = redisclient.get(lazypage_id + ':response')
-                assert response, '%s lazypage response must not be None' % lazypage_id
-
-                response = pickle.loads(response)
-                return response
+        s = redisclient.get(url + ':response')
+        if s:
+            response = pickle.loads(s)
+            return response
 
         # ================ patch for request.user =================
         user = request.user
@@ -61,10 +54,10 @@ def lazypage_decorator(view):
         request['user']['is_authenticated'] = is_authenticated
         # =========================================================
 
-        page_id = uuid.uuid4().hex
-        redisclient.setex(page_id + ':status', expired_seconds, 'loading')
-        redisclient.setex(page_id + ':response', expired_seconds, '')
+        page_id = uuid.uuid4().hex[-6:]
+        url = add_param_after_url(url, 'lazy_%s' % page_id)
         redisclient.setex(page_id + ':url', expired_seconds, url)
+        redisclient.setex(url + ':response', expired_seconds, '')
 
         kwargs['execute_by_task'] = True
         execute_lazy_view.delay(page_id, view_path, view_class_path, request, *args, **kwargs)

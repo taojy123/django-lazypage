@@ -27,8 +27,8 @@ def execute_lazy_view(page_id, view_path, view_class_path, request, *args, **kwa
 
     # ================ patch for request.user =================
     user = request.user
-    request.user.is_anonymous = CallableBool(request.user.is_anonymous)
-    request.user.is_authenticated = CallableBool(request.user.is_authenticated)
+    request.user.is_anonymous = CallableBool(user.is_anonymous)
+    request.user.is_authenticated = CallableBool(user.is_authenticated)
     # =========================================================
 
     response = view(request, *args, **kwargs)
@@ -39,8 +39,7 @@ def execute_lazy_view(page_id, view_path, view_class_path, request, *args, **kwa
 
     s = pickle.dumps(response)
 
-    url = redisclient.get(page_id + ':url')
+    # task should make sure finished in expired seconds, or the url will be destroyed and raise a error
+    url = redisclient.get(page_id + ':url').decode()
+    redisclient.setex(url + ':response', expired_seconds, s)
 
-    redisclient.setex(page_id + ':response', expired_seconds, s)
-    redisclient.setex(page_id + ':status', expired_seconds, 'loaded')
-    redisclient.setex(page_id + ':url', expired_seconds, url)

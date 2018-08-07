@@ -12,3 +12,12 @@ def get_redis_client(decode_responses=True):
     db = lazypage_settings.REDIS_DB
     return redis.StrictRedis(host=host, port=port, password=password, db=db, decode_responses=decode_responses)
 
+
+def add_param_after_url(url, param):
+    if '?' in url:
+        url += '&'
+    else:
+        url += '?'
+    url += param
+    return url
+

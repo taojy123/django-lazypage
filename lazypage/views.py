@@ -11,22 +11,17 @@ expired_seconds = lazypage_settings.EXPIRED_SECONDS
 
 
 def loading(request, page_id):
-
-    status = redisclient.get(page_id + ':status')
-    if status:
-        status = status.decode()
-        url = redisclient.get(page_id + ':url').decode()
-        if status == 'loading':
-            ttl = redisclient.ttl(page_id + ':status')
-            polling_seconds = lazypage_settings.POLLING_SECONDS
-        elif status == 'loaded':
-            url = url.replace('lazypage_id', 'old_lazypage_id')
-            if '?' in url:
-                url += '&'
-            else:
-                url += '?'
-            url += 'lazypage_id=%s' % page_id
-            redisclient.setex(page_id + ':url', expired_seconds, url)
+    url = redisclient.get(page_id + ':url')
+    if url:
+        url = url.decode()
+        response = redisclient.get(url + ':response')
+        assert response is not None, 'response cannot be None in this moment, please check!'
+        if response:
+            # page has loaded
             return HttpResponseRedirect(url)
+        else:
+            # page is loading
+            ttl = redisclient.ttl(page_id + ':url')
+            polling_seconds = lazypage_settings.POLLING_SECONDS
 
     return render(request, 'lazypage/loading.html', locals())
