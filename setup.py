@@ -1,10 +1,6 @@
 
 from setuptools import setup, find_packages
-
-try:
-    from lazypage import VERSION
-except Exception as e:
-    VERSION = ''
+from lazypage import VERSION
 
 install_requires = []
 for line in open('requirements.txt').readlines():
