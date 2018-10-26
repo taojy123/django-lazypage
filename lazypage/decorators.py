@@ -38,6 +38,14 @@ def lazypage_decorator(view):
 
         s = store_client.get(url + ':response')
         if s:
+
+            # if the page is loading now, redirect to the loading page
+            if len(s) == 6:
+                page_id = s
+                url = reverse('lazypage:loading', kwargs={'page_id': page_id})
+                return HttpResponseRedirect(url)
+
+            # if the page has loaded, return the response
             response = pickle.loads(s)
             return response
 
@@ -57,7 +65,7 @@ def lazypage_decorator(view):
         page_id = uuid.uuid4().hex[-6:]
         url = add_param_after_url(url, 'lazy_%s' % page_id)
         store_client.setex(page_id + ':url', expired_seconds, url)
-        store_client.setex(url + ':response', expired_seconds, '')
+        store_client.setex(url + ':response', expired_seconds, page_id)
 
         kwargs['execute_by_task'] = True
 

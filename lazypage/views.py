@@ -15,13 +15,14 @@ def loading(request, page_id):
     if url:
         url = url.decode()
         response = store_client.get(url + ':response')
-        assert response is not None, 'response cannot be None in this moment, please check!'
-        if response:
-            # page has loaded
-            return HttpResponseRedirect(url)
-        else:
+        assert response, 'response cannot be null in this moment, please check!'
+    
+        if len(response) == 6:
             # page is loading
             ttl = store_client.ttl(page_id + ':url')
             polling_seconds = lazypage_settings.POLLING_SECONDS
+        else:
+            # page has loaded
+            return HttpResponseRedirect(url)
 
     return render(request, 'lazypage/loading.html', locals())

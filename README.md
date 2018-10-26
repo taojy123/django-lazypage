@@ -8,12 +8,12 @@ django 页面异步加载解决方案
 参考示例 https://tools.athenagu.com/test_slow_page/?s=8
 
 
-###最简使用方法:
+###简易使用方法:
 ```
 # requirements.txt
 django
 ...
-django-lazypage>=0.2.1  # <--- 添加依赖
+django-lazypage  # <--- 添加依赖
 ```
 
 ```
