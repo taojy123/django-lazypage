@@ -17,11 +17,12 @@ from lazypage.settings import lazypage_settings
 broker = lazypage_settings.CELERY_BROKER_URL
 celery_app = Celery('lazypage', broker=broker)
 
-celery_app.autodiscover_tasks('tasks')
-
+try:
+    celery_app.autodiscover_tasks()
+except Exception as e:
+    celery_app.autodiscover_tasks(['tasks'])
 
 # $celery worker -A lazy_celery -l info
-
 
 @celery_app.task(bind=True)
 def debug_task(self):
