@@ -13,7 +13,7 @@ def generate_expired_at():
 
 class LazyStore(models.Model):
 
-    key = models.TextField(db_index=True)
+    key = models.CharField(db_index=True, max_length=500)
     value = models.BinaryField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     expired_at = models.DateTimeField(default=generate_expired_at)

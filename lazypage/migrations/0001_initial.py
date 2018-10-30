@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
             name='LazyStore',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('key', models.TextField(db_index=True)),
+                ('key', models.CharField(db_index=True, max_length=500)),
                 ('value', models.BinaryField(blank=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('expired_at', models.DateTimeField(default=lazypage.models.generate_expired_at)),
