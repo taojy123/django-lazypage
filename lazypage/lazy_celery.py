@@ -17,7 +17,7 @@ from lazypage.settings import lazypage_settings
 broker = lazypage_settings.CELERY_BROKER_URL
 celery_app = Celery('lazypage', broker=broker)
 
-celery_app.autodiscover_tasks()
+celery_app.autodiscover_tasks('tasks')
 
 
 # $celery worker -A lazy_celery -l info
