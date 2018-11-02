@@ -1,30 +1,28 @@
 
-# # set the default Django settings module for the 'celery' program.
-# import os
-# os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'proj.settings')
+from django.utils.module_loading import import_string
+from lazypage.settings import lazypage_settings
 
 try:
-    from celery import Celery, platforms
+    from celery import Celery
 except ImportError as e:
     print('You should install celery. $pip install celery>=4.2.1')
     raise e
 
-from lazypage.settings import lazypage_settings
 
+assert lazypage_settings.ASYNC_BY_CELERY, 'CELERY_APP of LAZYPAGE settings must be set'
 
-# platforms.C_FORCE_ROOT = True
+celery_app = lazypage_settings.CELERY_APP
+assert celery_app, 'CELERY_APP of LAZYPAGE settings must be set'
 
-broker = lazypage_settings.CELERY_BROKER_URL
-celery_app = Celery('lazypage', broker=broker)
+if isinstance(celery_app, str):
+    celery_app = import_string(celery_app)
+assert isinstance(celery_app, Celery), 'CELERY_APP of LAZYPAGE settings must be a Celery object'
 
-try:
-    celery_app.autodiscover_tasks()
-except Exception as e:
-    celery_app.autodiscover_tasks(['tasks'])
-
-# $celery worker -A lazy_celery -l info
+# celery_app.autodiscover_tasks('tasks')
 
 @celery_app.task(bind=True)
 def debug_task(self):
     print('Request: {0!r}'.format(self.request))
 
+
+# $celery worker -A project_name -l info

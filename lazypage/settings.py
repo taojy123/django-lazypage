@@ -10,7 +10,7 @@ DEFAULTS = {
     'POLLING_SECONDS': 5,
 
     'ASYNC_BY_CELERY': False,
-    'CELERY_BROKER_URL': 'redis://password@127.0.0.1:6379/1',
+    'CELERY_APP': None,
 
     'STORE_BY_REDIS': False,
     'REDIS_HOST': '127.0.0.1',
