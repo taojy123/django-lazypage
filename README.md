@@ -91,10 +91,10 @@ LAZYPAGE = {
     'POLLING_SECONDS': 5,     # 等待加载页面的刷新间隔(秒)，间隔越短越能第一时间看到加载完成后的页面
 
     'ASYNC_BY_CELERY': False,  # 是否使用 celery 来做生成页面内容的异步任务，默认为否，即使用另开一个线程的方式来实现异步生成页面
-    'CELERY_BROKER_URL': 'redis://password@127.0.0.1:6379/1',  # ASYNC_BY_CELERY 为 True 时生效，celery 的 broker 地址
-    # 关于 celery 以及 broker 的相关内容可以查看官方文档:
-    # http://docs.celeryproject.org/  
-    # http://docs.celeryproject.org/en/latest/getting-started/brokers/index.html
+    'CELERY_APP': None,  # ASYNC_BY_CELERY 为 True 时生效，这里需要是一个 Celery 实例，或是一个引入实例的路径(如:"myproj.celery.app")
+    # 关于 celery 以及在 django 中应用的相关内容可以查看官方文档:
+    # http://docs.celeryproject.org/
+    # http://docs.celeryproject.org/en/latest/django/first-steps-with-django.html
 
     'STORE_BY_REDIS': False,   # 是否使用 redis 来存储异步加载出来的页面内容，默认为否，即使用数据库存储
     'REDIS_HOST': '127.0.0.1', # STORE_BY_REDIS 为 True 是生效，redis 的 host 地址
