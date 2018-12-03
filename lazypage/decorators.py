@@ -22,10 +22,8 @@ def lazypage_decorator(view):
     if hasattr(view, 'view_class'):
         view_class = view.view_class
         view_class_path = re.findall(r"class '(.+?)'", str(view_class))[0]
-        print('load lazypage view_class_path:', view_class_path)
     else:
         view_path = view.__module__ + '.' + view.__name__
-        print('load lazypage view_path:', view_path)
 
     def lazypage_view(request, *args, **kwargs):
 

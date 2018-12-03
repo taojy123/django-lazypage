@@ -46,6 +46,5 @@ def execute_lazy_view(page_id, view_path, view_class_path, request, *args, **kwa
 def async_execute_lazy_view(page_id, view_path, view_class_path, request, *args, **kwargs):
     args = (page_id, view_path, view_class_path, request) + args
     t = threading.Thread(target=execute_lazy_view, args=args, kwargs=kwargs)
-    print(t, 'started')
     t.start()
 
