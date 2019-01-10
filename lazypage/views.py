@@ -12,6 +12,7 @@ expired_seconds = lazypage_settings.EXPIRED_SECONDS
 
 def loading(request, page_id):
     url = store_client.get(page_id + ':url')
+    origin_url = '&'.join(url.split('&')[:-1])
     if url:
         url = url.decode()
         response = store_client.get(url + ':response')
