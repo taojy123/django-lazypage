@@ -67,7 +67,7 @@ def add_param_after_url(url, param):
     if '?' in url:
         url += '&'
     else:
-        url += '?&'
+        url += '?'
     url += param
     return url
 

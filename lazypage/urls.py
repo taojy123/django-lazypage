@@ -4,7 +4,6 @@ from lazypage.views import loading
 import django
 
 version = django.VERSION
-print(version)
 
 assert (1, 9, 0) <= version < (2, 0, 0), 'Sorry, django-lazypage currently only support django between 1.9 and 1.11 versions!'
 
