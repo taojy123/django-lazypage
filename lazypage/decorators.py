@@ -39,7 +39,7 @@ def lazypage_decorator(view):
 
             # if the page is loading now, redirect to the loading page
             if len(s) == 6:
-                page_id = s
+                page_id = s.decode()
                 url = reverse('lazypage:loading', kwargs={'page_id': page_id})
                 return HttpResponseRedirect(url)
 

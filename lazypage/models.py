@@ -23,6 +23,11 @@ class LazyStore(models.Model):
         return timezone.now() > self.expired_at
 
     @property
+    def error_msg(self):
+        if self.key.endswith(':error'):
+            return self.value
+
+    @property
     def ttl(self):
         seconds = (self.expired_at - timezone.now()).total_seconds()
         return int(seconds)
