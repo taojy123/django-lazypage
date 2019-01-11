@@ -101,15 +101,17 @@
               Load Failed!
             {% else %}
               Is Loading...
+
+              <script>
+                  setTimeout(function () {
+                      top.location.reload()
+                  }, '{{ polling_seconds }}' * 1000)
+              </script>
+              
             {% endif %}
         </span>
       </div>
 
-      <script>
-          setTimeout(function () {
-              top.location.reload()
-          }, '{{ polling_seconds }}' * 1000)
-      </script>
       
   {% else %}
       <p>
