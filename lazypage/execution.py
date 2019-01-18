@@ -14,10 +14,21 @@ store_client = get_store_client(decode_responses=False)  # store_client.get retu
 expired_seconds = lazypage_settings.EXPIRED_SECONDS
 
 
-def execute_lazy_view(page_id, view_path, view_class_path, request, *args, **kwargs):
+def default_instantiate_method(request_dict):
+
+    request = dnode.DNode(request_dict)
+
+    # ================ patch for request.user =================
+    user = request.user
+    request.user.is_anonymous = CallableBool(user.is_anonymous)
+    request.user.is_authenticated = CallableBool(user.is_authenticated)
+
+    return request
+
+
+def execute_lazy_view(page_id, view_path, view_class_path, request, instantiate_method_path, *args, **kwargs):
 
     try:
-
         if view_path:
             view = import_string(view_path)
         elif view_class_path:
@@ -25,13 +36,12 @@ def execute_lazy_view(page_id, view_path, view_class_path, request, *args, **kwa
         else:
             assert False, 'view_path and view_class_path both need at least one!'
 
-        request = dnode.DNode(request)
+        if instantiate_method_path:
+            instantiate_method = import_string(instantiate_method_path)
+        else:
+            instantiate_method = default_instantiate_method
 
-        # ================ patch for request.user =================
-        user = request.user
-        request.user.is_anonymous = CallableBool(user.is_anonymous)
-        request.user.is_authenticated = CallableBool(user.is_authenticated)
-        # =========================================================
+        request = instantiate_method(request)
 
         response = view(request, *args, **kwargs)
         try:
@@ -53,8 +63,8 @@ def execute_lazy_view(page_id, view_path, view_class_path, request, *args, **kwa
         raise e
 
 
-def async_execute_lazy_view(page_id, view_path, view_class_path, request, *args, **kwargs):
-    args = (page_id, view_path, view_class_path, request) + args
+def async_execute_lazy_view(page_id, view_path, view_class_path, request, instantiate_method_path, *args, **kwargs):
+    args = (page_id, view_path, view_class_path, request, instantiate_method_path) + args
     t = threading.Thread(target=execute_lazy_view, args=args, kwargs=kwargs)
     t.start()
 

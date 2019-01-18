@@ -8,8 +8,8 @@ if lazypage_settings.ASYNC_BY_CELERY:
 
 
     @celery_app.task
-    def execute_lazy_task(page_id, view_path, view_class_path, request, *args, **kwargs):
-        execute_lazy_view(page_id, view_path, view_class_path, request, *args, **kwargs)
+    def execute_lazy_task(page_id, view_path, view_class_path, request, instantiate_method_path, *args, **kwargs):
+        execute_lazy_view(page_id, view_path, view_class_path, request, instantiate_method_path, *args, **kwargs)
         return True
 
 else:

@@ -20,6 +20,7 @@ assert isinstance(celery_app, Celery), 'CELERY_APP of LAZYPAGE settings must be 
 
 # celery_app.autodiscover_tasks('tasks')
 
+
 @celery_app.task(bind=True)
 def debug_task(self):
     print('Request: {0!r}'.format(self.request))
