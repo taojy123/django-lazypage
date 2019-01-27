@@ -4,8 +4,8 @@ import threading
 import traceback
 
 import dnode
-from django.utils.deprecation import CallableBool
 from django.utils.module_loading import import_string
+from lazypage import DJ_VERSION
 from lazypage.utils import get_store_client
 from lazypage.settings import lazypage_settings
 
@@ -20,8 +20,11 @@ def default_instantiate_method(request_dict):
 
     # ================ patch for request.user =================
     user = request.user
-    request.user.is_anonymous = CallableBool(user.is_anonymous)
-    request.user.is_authenticated = CallableBool(user.is_authenticated)
+
+    if DJ_VERSION < '2':
+        from django.utils.deprecation import CallableBool
+        request.user.is_anonymous = CallableBool(user.is_anonymous)
+        request.user.is_authenticated = CallableBool(user.is_authenticated)
 
     return request
 

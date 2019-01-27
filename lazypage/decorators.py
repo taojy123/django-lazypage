@@ -8,6 +8,7 @@ from django.urls import reverse
 
 from functools import wraps
 
+from lazypage import DJ_VERSION
 from lazypage.utils import get_store_client, add_param_after_url
 from lazypage.settings import lazypage_settings
 
@@ -22,8 +23,10 @@ def default_serialize_method(request):
 
     # ================ patch for request.user =================
     user = request.user
-    request_dict['user']['is_anonymous'] = user.is_anonymous()
-    request_dict['user']['is_authenticated'] = user.is_authenticated()
+
+    if DJ_VERSION < '2':
+        request_dict['user']['is_anonymous'] = user.is_anonymous()
+        request_dict['user']['is_authenticated'] = user.is_authenticated()
 
     return request_dict
 

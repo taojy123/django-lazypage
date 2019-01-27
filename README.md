@@ -1,20 +1,27 @@
 # django-lazypage
+
 django 页面异步加载解决方案
 
 [![PyPI Downloads](https://pypistats.com/badge/django-lazypage.png)](https://pypistats.com/package/django-lazypage)
 
-
 此项目旨在于解决由于后端处理时间较长导致载入页面上无响应地等待过久的问题。
-参考示例 https://tools.athenagu.com/test_slow_page/?s=8
+
+效果示例 https://tools.athenagu.com/test_slow_page/?s=8
 
 
-###简易使用方法:
+## 使用步骤:
+
+### 1 添加依赖
+
 ```
 # requirements.txt
 django
 ...
 django-lazypage  # <--- 添加依赖
 ```
+
+
+### 2 引入 app
 
 ```
 # settings.py
@@ -30,6 +37,8 @@ INSTALLED_APPS = (
     'lazypage',  # <--- 引入 app
 )
 ```
+
+### 3 用 lazypage_decorator 装饰 view
 
 ```
 # views.py
@@ -61,6 +70,8 @@ def test_slow_page(request):
 
 ```
 
+### 4 配置 urls
+
 ```
 # urls.py
 from django.conf.urls import url, include
@@ -75,6 +86,8 @@ urlpatterns = [
 
 ```
 
+### 5 migrate
+
 ```
 # 最后需要跑一次 migrate 创建 LazyStore 表
 $ python manage.py migrate
@@ -83,8 +96,10 @@ $ python manage.py migrate
 完成以上步骤后，访问 `/test_slow_page/` 就可以看到效果了
 
 
-###进阶配置:
+## 进阶配置:
+
 可在 `settings.py` 中添加 lazypage 配置项，调整参数符合自己的需求
+
 ```
 LAZYPAGE = {
     'EXPIRED_SECONDS': 3600,  # 页面最长等待超时，默认 3600 秒，超过还没加载出来的页面，将报错。所以这里建议设置一个足够大的值
