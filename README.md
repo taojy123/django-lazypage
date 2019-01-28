@@ -4,20 +4,21 @@ django 页面异步加载解决方案
 
 [![PyPI Downloads](https://pypistats.com/badge/django-lazypage.png)](https://pypistats.com/package/django-lazypage)
 
-此项目旨在于解决由于后端处理时间较长导致载入页面上无响应地等待过久的问题。
+解决由于后端请求处理时间较长导致前端长时间无响应的用户体验问题。
 
 效果示例 https://tools.athenagu.com/test_slow_page/?s=8
 
 
 ## 使用步骤:
 
-### 1 添加依赖
+<video id="video">
+    <source id="mp4" src="http://qiniu.athenagu.com/lazypage_mini.mp4" type="video/mp4">
+</video>
+
+### 1 安装 
 
 ```
-# requirements.txt
-django
-...
-django-lazypage  # <--- 添加依赖
+$ pip install django-lazypage
 ```
 
 
@@ -54,20 +55,10 @@ def index(request):
 
 @lazypage_decorator  # <--- 在原来的 view 上添加 lazypage_decorator 装饰器即可
 def test_slow_page(request):
-    s = int(request.GET.get('s', 18))
+    s = int(request.GET.get('s', 8))
     print(s)
     time.sleep(s)
-    page = """
-    <html>
-    <body>
-        此页面将在请求后 %s 秒, 才会呈现!
-    </body>
-    </html>
-    """ % s
-    return HttpResponse(page)
-
-
-
+    return HttpResponse('I am a slow page!')
 ```
 
 ### 4 配置 urls
@@ -83,7 +74,6 @@ urlpatterns = [
     url(r'^test_slow_page/$', test_slow_page),
     url(r'^lazypage/', lazypage.urls.get_urls()),  # <--- 添加 lazypage 的路由
 ]
-
 ```
 
 ### 5 migrate
@@ -98,7 +88,7 @@ $ python manage.py migrate
 
 ## 进阶配置:
 
-可在 `settings.py` 中添加 lazypage 配置项，调整参数符合自己的需求
+可在 `settings.py` 中添加 lazypage 配置项，按自己的实际需求设定参数
 
 ```
 LAZYPAGE = {

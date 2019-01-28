@@ -1,10 +1,15 @@
 
-from django.conf.urls import url
 from lazypage.views import loading
 from lazypage import DJ_VERSION
 
 
-assert DJ_VERSION >= '1.9.0', 'Sorry, django-lazypage currently only support django between 1.9 and 1.11 versions!'
+assert DJ_VERSION >= '1.9.0', 'Sorry, django-lazypage current only support django after than 1.9 versions!'
+
+
+if DJ_VERSION < '2':
+	from django.conf.urls import url
+else:
+	from django.urls import re_path as url
 
 
 urlpatterns = [
