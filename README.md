@@ -11,9 +11,7 @@ django 页面异步加载解决方案
 
 ## 使用步骤:
 
-<video id="video">
-    <source id="mp4" src="http://qiniu.athenagu.com/lazypage_mini.mp4" type="video/mp4">
-</video>
+[![Demo](http://qiniu.athenagu.com/lazy.png)](http://qiniu.athenagu.com/lazypage_mini.mp4)
 
 ### 1 安装 
 
