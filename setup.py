@@ -12,7 +12,7 @@ setup(
     name='django-lazypage',
     version=VERSION,
     description='django 页面异步加载解决方案',
-    long_description=open('README.md', encoding='utf8').read(),
+    long_description=open('README.md').read(),
     long_description_content_type="text/markdown",
     author='tao.py',
     author_email='taojy123@163.com',
