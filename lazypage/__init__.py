@@ -1,7 +1,7 @@
 
 default_app_config = "lazypage.apps.LazypageConfig"
 
-VERSION = '0.3.12'
+VERSION = '0.3.13'
 
 try:
     import django

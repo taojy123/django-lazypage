@@ -8,11 +8,16 @@ for line in open('requirements.txt').readlines():
     if line and not line.startswith('#'):
         install_requires.append(line)
 
+try:
+    long_description = open('README.md').read()
+except Exception as e:
+    long_description = open('README.md', encoding='utf8').read()
+
 setup(
     name='django-lazypage',
     version=VERSION,
     description='django 页面异步加载解决方案',
-    long_description=open('README.md').read(),
+    long_description=long_description,
     long_description_content_type="text/markdown",
     author='tao.py',
     author_email='taojy123@163.com',
