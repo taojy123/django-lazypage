@@ -3,7 +3,7 @@ from lazypage.views import loading
 from lazypage import DJ_VERSION
 
 
-assert DJ_VERSION.split('.') >= ('1', '9'), 'Sorry, django-lazypage current only support django after than 1.9 versions! current is %s' DJ_VERSION
+assert DJ_VERSION.split('.') >= ('1', '9'), 'Sorry, django-lazypage current only support django after than 1.9 versions! current is %s' % DJ_VERSION
 
 
 if DJ_VERSION < '2':
