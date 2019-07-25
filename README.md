@@ -2,7 +2,6 @@
 
 django 页面异步加载解决方案
 
-[![PyPI Downloads](https://pypistats.com/badge/django-lazypage.png)](https://pypistats.com/package/django-lazypage)
 
 解决由于后端请求处理时间较长导致前端长时间无响应的用户体验问题。
 
