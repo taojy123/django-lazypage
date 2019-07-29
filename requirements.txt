@@ -1,4 +1,4 @@
-#django>=1.9.0,<2
+#django>=1.9.0
 easyserializer>=0.2.6
 dnode>=0.2.4
 #redis>=2.10.6
